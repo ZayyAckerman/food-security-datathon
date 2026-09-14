@@ -1,3 +1,7 @@
+"""
+Apply the PostgreSQL analytical view defined in schema.sql.
+"""
+
 import os
 from pathlib import Path
 
@@ -5,26 +9,40 @@ from sqlalchemy import create_engine, text
 
 
 def get_engine():
-    user = os.getenv("PG_USER", "postgres")
-    password = os.getenv("PG_PASSWORD", "postgres")
-    host = os.getenv("PG_HOST", "localhost")
-    port = os.getenv("PG_PORT", "5432")
-    database = os.getenv("PG_DATABASE", "food_datathon")
+    """
+    Create a SQLAlchemy engine using the same PostgreSQL
+    environment variables used by the ETL load layer.
+    """
 
-    database_url = (
-        f"postgresql://{user}:{password}"
-        f"@{host}:{port}/{database}"
+    user = os.environ.get("PG_USER", "postgres")
+    password = os.environ.get("PG_PASSWORD", "postgres")
+    host = os.environ.get("PG_HOST", "localhost")
+    port = os.environ.get("PG_PORT", "5433")
+    db = os.environ.get("PG_DATABASE", "food_datathon")
+
+    url = (
+        f"postgresql+psycopg2://"
+        f"{user}:{password}@{host}:{port}/{db}"
     )
 
-    return create_engine(database_url)
+    return create_engine(url)
 
 
 def apply_sql_schema():
+    """
+    Read schema.sql and create/update the analytical SQL view.
+    """
+
     engine = get_engine()
 
-    schema_path = (
-        Path(__file__).resolve().parent.parent / "schema.sql"
-    )
+    # schema.sql is located one level above src/
+    project_root = Path(__file__).resolve().parent.parent
+    schema_path = project_root / "schema.sql"
+
+    if not schema_path.exists():
+        raise FileNotFoundError(
+            f"schema.sql not found at: {schema_path}"
+        )
 
     sql_script = schema_path.read_text(encoding="utf-8")
 
@@ -32,8 +50,9 @@ def apply_sql_schema():
         connection.execute(text(sql_script))
 
     print(
-        "✓ SQL schema and views successfully created "
-        "in PostgreSQL."
+        "✓ SQL view "
+        "'view_eat_trade_empowerment_matrix' "
+        "successfully created/updated in PostgreSQL!"
     )
 
 

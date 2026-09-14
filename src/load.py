@@ -29,7 +29,7 @@ def get_engine():
     user = os.environ.get("PG_USER", "postgres")
     password = os.environ.get("PG_PASSWORD", "postgres")
     host = os.environ.get("PG_HOST", "localhost")
-    port = os.environ.get("PG_PORT", "5432")
+    port = os.environ.get("PG_PORT", "5433")
     db = os.environ.get("PG_DATABASE", "food_datathon")
 
     url = (

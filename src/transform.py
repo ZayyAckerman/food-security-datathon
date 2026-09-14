@@ -406,7 +406,8 @@ def build_analysis_tables(
     )
 
     dbm_analysis = dbm_analysis[
-        [
+        [   
+            "country_code",
             "country_clean",
             "survey_round",
             "n",
