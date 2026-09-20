@@ -149,6 +149,7 @@ python3 src/load.py
 Move dags/food_insecurity_dag.py to your Airflow dags/ directory and trigger the DAG from the Airflow UI.
 Submitted by Buhlebethu Biyela for the Women in Data Datathon.
 
+PROJECT VERIFICATION CODE:WTC-S5PYXJW7
 
 
 

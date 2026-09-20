@@ -178,12 +178,16 @@ def clean_empowerment_data(
             f"clean_empowerment_data: missing expected columns {missing}"
         )
 
+    # dietary_diversity_score is not used by the NRI calculation (it's a
+    # separate visualization metric in visualize.py) and is not currently
+    # sourced for every country. Requiring it in dropna() would silently
+    # drop every row once it's missing/partially missing, so we only
+    # require the columns the NRI actually depends on.
     return df.dropna(
         subset=[
             "country_code",
             "female_ag_decision_score",
-            "crop_diversity_index",
-            "dietary_diversity_score"
+            "crop_diversity_index"
         ]
     )
 
@@ -219,11 +223,15 @@ def clean_trade_data(
             f"clean_trade_data: missing expected columns {missing}"
         )
 
+    # food_price_volatility_index is not used by the NRI calculation (it's
+    # a separate visualization metric in visualize.py) and is not currently
+    # sourced for every country. Requiring it in dropna() would silently
+    # drop every row once it's missing/partially missing, so we only
+    # require the column the NRI actually depends on.
     return df.dropna(
         subset=[
             "country_code",
-            "net_staple_import_dependency_pct",
-            "food_price_volatility_index"
+            "net_staple_import_dependency_pct"
         ]
     )
 
